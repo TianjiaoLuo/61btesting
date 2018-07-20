@@ -34,17 +34,37 @@ public class Main implements Serializable {
             System.out.println("Not in an initialized gitlet directory.");
             return;
         }
-        if (args[1].equals("add")) {
+        if (args[0].equals("add")) {
             if (args.length != 2) {
                 System.out.println("Incorrect operands.");
                 return;
+            } else {
+                CT = commitTree.deserialize(".gitlet");
+                CT.add(args[1]);
+                CT.serialize(CT, ".gitlet");
+                return;
             }
-            CT = commitTree.deserialize(".gitlet");
-            CT.add(args[1]);
-            CT.serialize(CT, ".gitlet");
-            return;
+        } else if (args[0].equals("branch")) {
+            if (args.length != 2) {
+                System.out.println("Incorrect operands.");
+                return;
+            } else {
+                CT = CT.deserialize(".gitlet");
+                CT.branch(args[1]);
+                CT.serialize(CT, ".gitlet");
+                return;
+            }
+        } else if (args[0].equals("rm-branch")) {
+            if (args.length != 2) {
+                System.out.println("Incorrect operands.");
+                return;
+            } else {
+                CT = CT.deserialize(".gitlet");
+                CT.rmbranch(args[1]);
+                CT.serialize(CT, ".gitlet");
+                return;
+            }
         }
-
     }
 
 
