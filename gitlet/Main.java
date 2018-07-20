@@ -34,7 +34,7 @@ public class Main implements Serializable {
             System.out.println("Not in an initialized gitlet directory.");
             return;
         }
-        if (args[0].equals("add")) {
+        if (args[1].equals("add")) {
             if (args.length != 2) {
                 System.out.println("Incorrect operands.");
                 return;
