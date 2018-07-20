@@ -4,8 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 public class commitTree implements Serializable {
@@ -43,12 +45,38 @@ public class commitTree implements Serializable {
             idtoNode.put(previousCommit.hashcode(), previousCommit);
             branchMap.get("master").add(previousCommit);
             (new File(".gitlet")).mkdir();
-            (new File(".gitlet/commits")).mkdir();
-            serialize(previousCommit, ".gitlet/commits/" + previousCommit.hashcode());
+            (new File(".gitlet/commitFiles")).mkdir();
+            serialize(previousCommit, ".gitlet/commitFiles/" + previousCommit.hashcode());
         }
     }
 
-    /* We searched for the serialize method online */
+    public void add(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            System.out.println("File does not exist.");
+            return;
+        }
+        if (file.isDirectory()) {
+            return;
+        }
+        if (removedFiles.contains(path)) {
+            removedFiles.remove(path);
+        } else {
+            String hashcode = Utils.sha1(Utils.readContents(file));
+            String fileID = previousCommit.fileseachCommit.get(path);
+            if (previousCommit.fileseachCommit.containsKey(path) && (hashcode.equals(fileID))) {
+                return;
+            } else {
+                new File(".gitlet/stagingArea").mkdir();
+                String id = Utils.sha1(Utils.readContents(file));
+                File newFile = new File(".gitlet/stagingArea/" + id);
+                Utils.writeContents(newFile, Utils.readContents(file));
+                stagingArea.put(path, id);
+            }
+        }
+    }
+
+
     public void serialize(Object object, String path) {
         File file = new File(".gitlet");
         File outFile = new File(file, path + ".ser");
@@ -60,5 +88,21 @@ public class commitTree implements Serializable {
         } catch (IOException e) {
             return;
         }
+    }
+
+    public static commitTree deserialize(String path) {
+        commitTree object = null;
+        File file = new File(".gitlet");
+        File inFile = new File(file, path + ".ser");
+        try {
+            ObjectInputStream inp = new ObjectInputStream(new FileInputStream(
+                    inFile));
+            object = (commitTree) inp.readObject();
+            inp.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            object = null;
+        }
+        return object;
     }
 }

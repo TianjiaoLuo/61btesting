@@ -1,6 +1,7 @@
 package gitlet;
 
 import java.io.Serializable;
+import java.io.File;
 
 /* Driver class for Gitlet, the tiny stupid version-control system.
    @author
@@ -28,7 +29,24 @@ public class Main implements Serializable {
             System.out.println("No command with that name exists.");
             return;
         }
+        File gitletFolder = new File(".gitlet");
+        if (!gitletFolder.exists()) {
+            System.out.println("Not in an initialized gitlet directory.");
+            return;
+        }
+        if (args[0].equals("add")) {
+            if (args.length != 2) {
+                System.out.println("Incorrect operands.");
+                return;
+            }
+            CT = commitTree.deserialize(".gitlet");
+            CT.add(args[1]);
+            CT.serialize(CT, ".gitlet");
+            return;
+        }
 
     }
+
+
 
 }
