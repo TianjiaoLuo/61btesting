@@ -5,7 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class initCommand extends commitTree implements Serializable {
-    public void init() {
+	
+    public  void init() {
         File file = new File(".gitlet");
         if (file.exists()) {
             System.out.println("A gitlet version-control system already exists in the current directory.");
@@ -17,9 +18,13 @@ public class initCommand extends commitTree implements Serializable {
             branchMap.put("master", new ArrayList<>());
             idtoNode.put(previousCommit.hashcode(), previousCommit);
             branchMap.get("master").add(previousCommit);
-            (new File(".gitlet")).mkdir();
-            (new File(".gitlet/commitFiles")).mkdir();
+            mkDir("\".gitlet\"");
+            mkDir(".gitlet/commitFiles");
             serialize(previousCommit, ".gitlet/commitFiles/" + previousCommit.hashcode());
         }
+    }
+    
+    private void mkDir(String path) {
+    	new File(path).mkdir();
     }
 }

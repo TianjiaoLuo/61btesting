@@ -1,6 +1,9 @@
 package gitlet;
 
-public class rmbranch extends commitTree {
+import java.io.Serializable;
+
+public class rmbranch extends commitTree implements Serializable{
+	
     public void rmbranch(String branchName) {
         if (!branchMap.containsKey(branchName)) {
             System.out.println("A branch with that name does not exist.");

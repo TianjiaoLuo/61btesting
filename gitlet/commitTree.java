@@ -11,24 +11,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class commitTree implements Serializable {
-    public HashMap<String, ArrayList<Node>> branchMap;
-    public HashMap<String, String> stagingArea;
-    public HashMap<String, Node> bracntoLastNode;
-    public HashSet<String> removedFiles;
-    public HashSet<String> modifiednotaddFiles;
-    public Node previousCommit;
-    public String currentBranch;
-    public HashMap<String, Node> idtoNode;
+	
+    public static HashMap<String, ArrayList<Node>> branchMap=new HashMap<>();
+    public static HashMap<String, String> stagingArea= new HashMap<>();
+    public static HashMap<String, Node> bracntoLastNode= new HashMap<>();
+    public static HashSet<String> removedFiles= new HashSet<>();
+    public static HashSet<String> modifiednotaddFiles= new HashSet<>();
+    public static Node previousCommit;
+    public static String currentBranch="";
+    public static HashMap<String, Node> idtoNode=new HashMap<>();;
 
     public commitTree() {
-        branchMap = new HashMap<>();
-        stagingArea = new HashMap<>();
-        removedFiles = new HashSet<>();
-        modifiednotaddFiles = new HashSet<>();
-        bracntoLastNode = new HashMap<>();
-        previousCommit = null;
-        currentBranch = "";
-        idtoNode = new HashMap<>();
     }
 
 
@@ -36,6 +29,9 @@ public class commitTree implements Serializable {
         File file = new File(".gitlet");
         File outFile = new File(file, path + ".ser");
         try {
+        	if(!outFile.exists()) {
+        		outFile.createNewFile();
+        	}
             ObjectOutputStream out = new ObjectOutputStream(
                     new FileOutputStream(outFile));
             out.writeObject(object);
@@ -50,8 +46,10 @@ public class commitTree implements Serializable {
         File file = new File(".gitlet");
         File inFile = new File(file, path + ".ser");
         try {
-            ObjectInputStream inp = new ObjectInputStream(new FileInputStream(
-                    inFile));
+        	if(!inFile.exists()) {
+        		inFile.createNewFile();
+        	}
+            ObjectInputStream inp = new ObjectInputStream(new FileInputStream(inFile));
             object = (commitTree) inp.readObject();
             inp.close();
         } catch (IOException | ClassNotFoundException e) {
@@ -59,6 +57,12 @@ public class commitTree implements Serializable {
             object = null;
         }
         return object;
+    }
+
+    public Node PreviousNode(String branchName) {
+        ArrayList<Node> NodeList = branchMap.get(branchName);
+        Node previous = NodeList.get(NodeList.size() - 1);
+        return previous;
     }
 
 }

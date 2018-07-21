@@ -1,8 +1,10 @@
 package gitlet;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class rmCommand extends commitTree {
+public class rmCommand extends commitTree implements Serializable{
+	
     public void rm(String fileName) {
         if (!stagingArea.containsKey(fileName) && !previousCommit.fileseachCommit.containsKey(fileName)) {
             System.out.println("No reason to remove the file.");
@@ -14,7 +16,7 @@ public class rmCommand extends commitTree {
             removedFiles.add(fileName);
         } else {
             stagingArea.remove(fileName);
-            File file = new File(".gitlet/stagedFiles" + stagingArea.get(fileName));
+            File file = new File(".gitlet/stagingArea" + stagingArea.get(fileName));
             file.delete();
         }
     }

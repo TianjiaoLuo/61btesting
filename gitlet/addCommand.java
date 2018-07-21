@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.Serializable;
 
 public class addCommand extends commitTree implements Serializable {
-    public void add(String path) {
+    
+	
+	public void add(String path) {
         File file = new File(path);
         if (!file.exists()) {
             System.out.println("File does not exist.");
@@ -17,6 +19,7 @@ public class addCommand extends commitTree implements Serializable {
             removedFiles.remove(path);
         } else {
             String hashcode = Utils.sha1(Utils.readContents(file));
+            
             String fileID = previousCommit.fileseachCommit.get(path);
             if (previousCommit.fileseachCommit.containsKey(path) && (hashcode.equals(fileID))) {
                 return;
@@ -28,5 +31,6 @@ public class addCommand extends commitTree implements Serializable {
                 stagingArea.put(path, id);
             }
         }
+      
     }
 }
