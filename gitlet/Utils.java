@@ -8,9 +8,9 @@ import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Formatter;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /* Assorted utilities.
@@ -147,6 +147,15 @@ class Utils {
        a directory. */
     static List<String> plainFilenamesIn(String dir) {
         return plainFilenamesIn(new File(dir));
+    }
+
+    public static String date() {
+        TimeZone timeStandard = TimeZone.getDefault();
+        DateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        form.setTimeZone(timeStandard);
+        Date date = new Date();
+        String time = form.format(date);
+        return time;
     }
 
 }

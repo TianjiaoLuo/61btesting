@@ -15,12 +15,12 @@ public class Main implements Serializable {
             System.out.println("Please enter a command.");
             System.exit(0);
         }
-        commitTree CT = new commitTree();
         if (args[0].equals("init")) {
             if (args.length != 1) {
                 System.out.println("Incorrect operands.");
                 System.exit(0);
             } else {
+                initCommand CT = new initCommand();
                 CT.init();
                 CT.serialize(CT, ".gitlet");
                 return;
@@ -39,7 +39,8 @@ public class Main implements Serializable {
                 System.out.println("Incorrect operands.");
                 return;
             } else {
-                CT = commitTree.deserialize(".gitlet");
+                addCommand CT = new addCommand();
+                CT = (addCommand) addCommand.deserialize(".gitlet");
                 CT.add(args[1]);
                 CT.serialize(CT, ".gitlet");
                 return;
@@ -49,7 +50,8 @@ public class Main implements Serializable {
                 System.out.println("Incorrect operands.");
                 return;
             } else {
-                CT = CT.deserialize(".gitlet");
+                branchCommand CT = new branchCommand();
+                CT = (branchCommand) CT.deserialize(".gitlet");
                 CT.branch(args[1]);
                 CT.serialize(CT, ".gitlet");
                 return;
@@ -59,7 +61,8 @@ public class Main implements Serializable {
                 System.out.println("Incorrect operands.");
                 return;
             } else {
-                CT = CT.deserialize(".gitlet");
+                rmbranch CT = new rmbranch();
+                CT = (rmbranch) CT.deserialize(".gitlet");
                 CT.rmbranch(args[1]);
                 CT.serialize(CT, ".gitlet");
                 return;
